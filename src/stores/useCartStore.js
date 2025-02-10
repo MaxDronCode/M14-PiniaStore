@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash'
 import { defineStore } from 'pinia'
 import { groupBy } from 'lodash'
+import { useAuthUserStore } from './useAuthUserStore'
 
 export const useCartStore = defineStore("CartStore", {
   state: () => {
@@ -20,13 +21,14 @@ export const useCartStore = defineStore("CartStore", {
     },
     setItemCount(item, count) {
       count = parseInt(count)
-      const index = this.items.findIndex(i => i.name === item.name)
-      if (index !== -1) {
-        this.items.splice(index, 1)
-        for (let i = 0; i < count; i++) {
-          this.items.push({...item})
-        }
+      this.items = this.items.filter(i => i.name !== item.name)
+      for (let i = 0; i < count; i++) {
+        this.items.push({...item})
       }
+    },
+    checkout() {
+      const authUserStore = useAuthUserStore()
+      alert(`${authUserStore.username} just bought ${this.count} items for a total of $${this.totalPrice}`)
     }
   },
   getters: {
@@ -39,6 +41,15 @@ export const useCartStore = defineStore("CartStore", {
     grouped: state => groupBy(state.items, item => item.name),
     groupCount: state => name => state.grouped[name].length,
     // recorrem state.items amb el reduce, per cada item sumem el preu i retornem el total, el 0 del final indica que el total comença a 0
-    totalPrice: state => state.items.reduce((total, item) => total + item.price, 0)
+    totalPrice: state => state.items.reduce((total, item) => total + item.price, 0),
+    groupedArray: (state) => {
+      const groups = groupBy(state.items, item => item.name)
+      return Object.keys(groups)
+      .sort()
+      .map(key => ({
+        name: key,
+        items: groups[key]
+      }))
+    }
   }
 })
