@@ -9,7 +9,6 @@ productStore.fill()
 
 cartStore.$onAction(({
   name,
-  store,
   args,
   after,
   onError
@@ -22,6 +21,11 @@ cartStore.$onAction(({
       console.error('Error adding items to cart:', error.message)
     })
   }
+})
+
+cartStore.$subscribe((mutation, state) => {
+  console.log({mutation})
+  console.log({state})
 })
 </script>
 
