@@ -6,14 +6,20 @@ import { useCartStore } from '@/stores/useCartStore.js'
 const cartStore = useCartStore()
 const productStore = useProductStore()
 productStore.fill()
-// const addToCart = (count, product) => {
-//   count = parseInt(count)
-//   cartStore.$patch(state => {
-//     for (let i = 0; i < count; i++) {
-//     state.items.push(product)
-//   }
-//   })
-// }
+
+cartStore.$onAction(({
+  name,
+  store,
+  args,
+  after,
+  onError
+}) => {
+  if (name === 'addItems') {
+    after(() => {
+      console.log('Added items to cart:', args[0])
+    })
+  }
+})
 </script>
 
 <template>
