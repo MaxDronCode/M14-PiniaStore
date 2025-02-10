@@ -18,6 +18,9 @@ cartStore.$onAction(({
     after(() => {
       console.log('Added items to cart:', args[0])
     })
+    onError((error) => {
+      console.error('Error adding items to cart:', error.message)
+    })
   }
 })
 </script>
