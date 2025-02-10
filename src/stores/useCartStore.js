@@ -6,7 +6,8 @@ import { useAuthUserStore } from './useAuthUserStore'
 export const useCartStore = defineStore("CartStore", {
   state: () => {
     return {
-      items: []
+      items: [],
+      historyEnabled: true
     }
   },
   actions: {

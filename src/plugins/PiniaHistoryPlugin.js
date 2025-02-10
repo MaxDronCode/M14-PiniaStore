@@ -1,6 +1,9 @@
 import { ref, reactive } from 'vue'
 
 export function piniaHistoryPlugin({ pinia, app, store, options }) {
+
+  if(!store.$state.historyEnabled) return
+
   const history = reactive([])
   const future = reactive([])
   const doingHistory = ref(false)
